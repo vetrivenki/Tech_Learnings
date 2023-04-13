@@ -8,7 +8,6 @@ WORKDIR app
 
 COPY package.json .
 
-RUN ls -ll
-
 # command executable and version
 ENTRYPOINT ["node"]
+EXPOSE 8080

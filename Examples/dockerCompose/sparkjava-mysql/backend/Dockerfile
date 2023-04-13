@@ -1,5 +1,4 @@
 # syntax=docker/dockerfile:1.4
-
 FROM --platform=$BUILDPLATFORM maven:3.8.5-eclipse-temurin-17 AS build
 WORKDIR /workdir/server
 COPY pom.xml /workdir/server/pom.xml
@@ -10,16 +9,14 @@ COPY src /workdir/server/src
 RUN mvn --batch-mode clean compile assembly:single
 
 FROM build AS dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends git
 
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
+
+RUN useradd -s /bin/bash -m vscode
+RUN groupadd docker
+RUN usermod -aG docker vscode
+
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
 CMD ["java", "-jar", "target/app.jar" ]
