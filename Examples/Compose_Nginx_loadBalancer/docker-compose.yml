@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+
+  nginx_hello:
+      build: ./nginx-hello
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - nginx_hello
+    ports:
+      - 80:80
+    
+      
+    
